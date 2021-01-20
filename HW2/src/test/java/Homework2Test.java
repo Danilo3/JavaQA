@@ -1,5 +1,7 @@
 
 import config.TestConfig;
+import factory.Browser;
+import factory.WebDriverFactory;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.aeonbits.owner.ConfigFactory;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 
@@ -25,13 +28,12 @@ public class Homework2Test {
 
     @Before
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = WebDriverFactory.createNewDriver(Browser.CHROME);
         logger.info("Драйвер поднят");
+        driver.manage().window().maximize();
     }
     @Test
     public void yandexTitleCheck() {
-        driver.manage().window().maximize();
         driver.get(cfg.yaUrl());
         logger.info("Открыта страница yandex");
         Assert.assertEquals("Wrong title", cfg.getYandexTitle(), driver.getTitle());
