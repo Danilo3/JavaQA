@@ -51,7 +51,9 @@ public class Homework2Test {
         By byXPath = By.xpath(phoneXPathQuery);
         Pattern phoneAreaPattern = Pattern.compile(cfg.getNumberBegin() + "[0-9]");
         new WebDriverWait(driver, 5).until(ExpectedConditions.textMatches(byXPath, phoneAreaPattern));
-        logger.info("Телефоны найдены");
+        WebElement areaPhone = driver.findElement(byXPath);
+        Assert.assertNotNull("Телефон не найден", areaPhone);
+        logger.info("Телефон найден");
     }
 
     @After
