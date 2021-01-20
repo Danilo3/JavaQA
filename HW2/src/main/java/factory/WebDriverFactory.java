@@ -27,6 +27,8 @@ public class WebDriverFactory {
 
     private static WebDriver createNewDriver(String name, Optional<Capabilities> capabilities)
     {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException("wrong name: " + name);
         try {
             switch (name.toLowerCase()) {
                 case "chromium": {

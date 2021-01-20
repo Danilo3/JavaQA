@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 
@@ -28,9 +29,14 @@ public class Homework2Test {
 
     @Before
     public void setUp() {
-        driver = WebDriverFactory.createNewDriver(Browser.CHROME);
+        String browserName = System.getProperty("browser");
+        if (browserName == null || browserName.isEmpty())
+            driver = WebDriverFactory.createNewDriver(Browser.CHROME);
+        else
+            driver = WebDriverFactory.createNewDriver(browserName);
         logger.info("Драйвер поднят");
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
     }
     @Test
     public void yandexTitleCheck() {
@@ -44,7 +50,7 @@ public class Homework2Test {
         driver.get(cfg.tele2Url());
         logger.info("Открыта страница tele2");
         By byId = By.id(cfg.getTele2FieldId());
-        WebElement searchField =  new WebDriverWait(driver,5).until(ExpectedConditions.visibilityOfElementLocated(byId));
+        WebElement searchField =  new WebDriverWait(driver,3).until(ExpectedConditions.visibilityOfElementLocated(byId));
         Assert.assertNotNull("Поле для поиска не найдено", searchField);
         logger.info("Поле для поиска найдено");
         searchField.sendKeys(cfg.getNumberBegin());
@@ -52,7 +58,7 @@ public class Homework2Test {
         logger.info("Значение установлено");
         By byXPath = By.xpath(phoneXPathQuery);
         Pattern phoneAreaPattern = Pattern.compile(cfg.getNumberBegin() + "[0-9]");
-        new WebDriverWait(driver, 5).until(ExpectedConditions.textMatches(byXPath, phoneAreaPattern));
+        new WebDriverWait(driver, 3).until(ExpectedConditions.textMatches(byXPath, phoneAreaPattern));
         WebElement areaPhone = driver.findElement(byXPath);
         Assert.assertNotNull("Телефон не найден", areaPhone);
         logger.info("Телефон найден");
